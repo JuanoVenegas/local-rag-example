@@ -5,7 +5,7 @@ import streamlit as st
 from streamlit_chat import message
 from rag import ChatPDF
 
-st.set_page_config(page_title="ChatPDF")
+st.set_page_config(page_title="ChatPDF Casero")
 
 
 def display_messages():
@@ -16,12 +16,14 @@ def display_messages():
 
 
 def process_input():
-    if st.session_state["user_input"] and len(st.session_state["user_input"].strip()) > 0:
+    if (
+        st.session_state["user_input"]
+        and len(st.session_state["user_input"].strip()) > 0
+    ):
         user_text = st.session_state["user_input"].strip()
-        with st.session_state["thinking_spinner"], st.spinner(f"Thinking"):
-            agent_text = st.session_state["assistant"].ask(user_text)
-
         st.session_state["messages"].append((user_text, True))
+        with st.session_state["thinking_spinner"], st.spinner(f"Procesando..."):
+            agent_text = st.session_state["assistant"].ask(user_text)
         st.session_state["messages"].append((agent_text, False))
 
 
@@ -35,7 +37,9 @@ def read_and_save_file():
             tf.write(file.getbuffer())
             file_path = tf.name
 
-        with st.session_state["ingestion_spinner"], st.spinner(f"Ingesting {file.name}"):
+        with st.session_state["ingestion_spinner"], st.spinner(
+            f"Ingesting {file.name}"
+        ):
             st.session_state["assistant"].ingest(file_path)
         os.remove(file_path)
 
@@ -45,12 +49,12 @@ def page():
         st.session_state["messages"] = []
         st.session_state["assistant"] = ChatPDF()
 
-    st.header("ChatPDF")
+    st.header("ChatPDF Casero")
 
-    st.subheader("Upload a document")
+    st.subheader("Suba un documento")
     st.file_uploader(
-        "Upload document",
-        type=["pdf"],
+        "Suba un documento",
+        type=["pdf", "md", "txt"],
         key="file_uploader",
         on_change=read_and_save_file,
         label_visibility="collapsed",
@@ -60,7 +64,7 @@ def page():
     st.session_state["ingestion_spinner"] = st.empty()
 
     display_messages()
-    st.text_input("Message", key="user_input", on_change=process_input)
+    st.text_input("Mensaje", key="user_input", on_change=process_input)
 
 
 if __name__ == "__main__":

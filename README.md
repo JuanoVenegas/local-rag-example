@@ -1,3 +1,12 @@
+Forked from: https://github.com/vndee/local-rag-example/tree/main
+
+Article: https://medium.com/@vndee.huynh/build-your-own-rag-and-run-it-locally-langchain-ollama-streamlit-181d42805895
+
+This fork is for testing purposes and to adapt the tool to use llama3.1 model in Spanish.
+
+
+----
+
 # local-rag-example
 Build your own ChatPDF and run them locally
 
