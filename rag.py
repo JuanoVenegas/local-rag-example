@@ -55,10 +55,10 @@ class ChatPDF:
             SYSTEM_PROMPT,
         )
 
-    def ingest(self, file_path: str):
+    def ingest(self, file_path: str, doc_type: str):
         print("Ingesting file:", file_path)
         # Check if it's a pdf file or a text file
-        if file_path.endswith(".pdf"):
+        if doc_type.lower() == "pdf":
             docs = PyPDFLoader(file_path=file_path).load()
         else:
             docs = TextLoader(file_path=file_path).load()

@@ -32,6 +32,8 @@ def read_and_save_file():
     st.session_state["messages"] = []
     st.session_state["user_input"] = ""
 
+    doc_type = st.session_state["selectbox_document_type"]
+
     for file in st.session_state["file_uploader"]:
         with tempfile.NamedTemporaryFile(delete=False) as tf:
             tf.write(file.getbuffer())
@@ -40,7 +42,7 @@ def read_and_save_file():
         with st.session_state["ingestion_spinner"], st.spinner(
             f"Ingesting {file.name}"
         ):
-            st.session_state["assistant"].ingest(file_path)
+            st.session_state["assistant"].ingest(file_path, doc_type)
         os.remove(file_path)
 
 
@@ -52,6 +54,8 @@ def page():
     st.header("ChatPDF Casero")
 
     st.subheader("Suba un documento")
+    # Add a combobox: text, pdf
+    st.selectbox("Tipo de documento", ["PDF", "Texto"], key="selectbox_document_type")
     st.file_uploader(
         "Suba un documento",
         type=["pdf", "md", "txt"],
